@@ -1,0 +1,15 @@
+[package]
+name = "fx"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+rayon = "1.7.0"
+chrono = "0.4.26"
+regex ="1.9.1"
+
+[profile.dev]
+opt-level = 0
+
+[profile.release]
+opt-level = 3
