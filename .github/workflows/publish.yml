@@ -17,19 +17,6 @@ on:
     types:
       - completed
 jobs:
-  new:
-    runs-on: ubuntu-latest
-    steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v3
-      - 
-        name: New release
-        uses: taiki-e/create-gh-release-action@v1
-        with:
-          changelog: CHANGELOG.md
-          token: ${GITHUB_TOKEN}
-
   build:
     name: publish - ${{ matrix.target }}
     strategy:
