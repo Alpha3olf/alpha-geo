@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: manual trigger
+        description: trigger
         required: true
         default: '0'
 
