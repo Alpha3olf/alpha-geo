@@ -5,14 +5,30 @@ env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   CARGO_TERM_COLOR: always
 
+permissions:
+  contents: write
+
 on:
   push:
     tags:
-      - v*
+      - v[0-9]+.*
 
 jobs:
+  new:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v3
+      - 
+        name: New release
+        uses: taiki-e/create-gh-release-action@v1
+        with:
+          changelog: CHANGELOG.md
+          token: ${GITHUB_TOKEN}
+
   build:
-    name: Release - ${{ matrix.target }}
+    name: publish - ${{ matrix.target }}
     strategy:
       matrix:
         platform: [ubuntu-latest, windows-latest, macos-latest]
@@ -27,6 +43,7 @@ jobs:
         name: Install Rust
         uses: actions-rs/toolchain@v1
         with:
+          profile: 
           toolchain: stable
           override: true
 
@@ -48,9 +65,3 @@ jobs:
           command: build
           args: --release --target ${{ matrix.target }}
 
-      - 
-        name: Publish release
-        uses: taiki-e/upload-rust-binary-action@v1.1.0
-        with:
-          bin: ${{ matrix.target }}
-          token: ${CRATES_TOKEN}
