@@ -1,0 +1,56 @@
+name: publish
+
+env:
+  CRATES_TOKEN: ${{ secrets.CRATES_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  CARGO_TERM_COLOR: always
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  build:
+    name: Release - ${{ matrix.target }}
+    strategy:
+      matrix:
+        platform: [ubuntu-latest, windows-latest, macos-latest]
+        target: [x86_64-unknown-linux-musl, x86_64-pc-windows-gnu, x86_64-apple-darwin]
+    runs-on: ${{ matrix.platform }}
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v3
+
+      - 
+        name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+
+      - 
+        if: matrix.os == 'ubuntu-latest'
+          run: sudo chown -R $(whoami):$(id -ng) ~/.cargo/
+
+      - 
+        name: Cache Cargo Registry
+        uses: actions/cache@v1
+        with:
+          path: ~/.cargo/registry
+          key: ${{ matrix.platform }}-cargo-registry-${{ hashFiles('**/Cargo.toml') }}
+
+      - 
+        name: Build release
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release --target ${{ matrix.target }}
+
+      - 
+        name: Publish release
+        uses: taiki-e/upload-rust-binary-action@v1.1.0
+        with:
+          bin: ${{ matrix.target }}
+          token: ${CRATES_TOKEN}
