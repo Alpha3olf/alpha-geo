@@ -1,4 +1,4 @@
-name: tag
+name: auto-tag
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -10,25 +10,27 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: 'manual tag it'
+        description: manual trigger
         required: true
         default: '0'
 
 jobs:
   create-tag:
-    name: "Create tag"
     runs-on: "ubuntu-latest"
     steps:
-      - name: "Check out the repo"
+      - 
+        name: Checkout
         uses: actions/checkout@v3
 
-      - name: "Get tag"
-        id: "get-tag"
-        shell: "bash"
+      - 
+        name: Get
+        id: tag
+        shell: bash
         run: |
-          echo PKG_VERSION=$(awk -F ' = ' '$1 ~ /version/ { gsub(/["]/, "", $2); printf("%s",$2) }' Cargo.toml) >> $GITHUB_OUTPUT
+          echo VERSION=$(awk -F ' = ' '$1 ~ /version/ { gsub(/["]/, "", $2); printf("%s",$2) }' Cargo.toml) >> $GITHUB_OUTPUT
 
-      - name: "Set Tag"
-        shell: "bash"
+      - 
+        name: Set
+        shell: bash
         run: |
-          git tag v${{ steps.get-tag.outputs.PKG_VERSION }} && git push --tags
+          git tag v${{ steps.tag.outputs.VERSION }} && git push --tags
