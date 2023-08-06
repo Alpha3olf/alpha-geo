@@ -43,7 +43,7 @@ jobs:
         name: Install Rust
         uses: actions-rs/toolchain@v1
         with:
-          profile: 
+          profile: minimal
           toolchain: stable
           override: true
 
