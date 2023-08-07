@@ -40,7 +40,7 @@ jobs:
 
       - 
         name: Install Rust
-        uses: actions-rs/toolchain@v1
+        uses: actions-rs/toolchain@v1.0.6
         with:
           profile: minimal
           toolchain: stable
@@ -52,15 +52,16 @@ jobs:
 
       - 
         name: Cache Cargo Registry
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         with:
           path: ~/.cargo/registry
           key: ${{ matrix.platform }}-cargo-registry-${{ hashFiles('**/Cargo.toml') }}
 
       - 
-        name: Build release
-        uses: actions-rs/cargo@v1
+        name: Upload release
+        uses: taiki-e/upload-rust-binary-action@v1.16.0
         with:
-          command: build
-          args: --release --all-targets
+          bin: fx
+          target: ${{ matrix.target }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
