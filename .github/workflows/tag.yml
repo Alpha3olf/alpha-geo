@@ -18,7 +18,7 @@ jobs:
   new-tag:
     runs-on: "ubuntu-latest"
     outputs:
-          tag: ${{ steps.pkg-version.outputs.ver }}
+          tag: ${{ steps.tag.outputs.ver }}
     steps:
       - 
         name: Checkout
