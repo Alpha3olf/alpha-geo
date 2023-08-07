@@ -63,5 +63,6 @@ jobs:
         with:
           bin: fx
           target: ${{ matrix.target }}
+          ref: refs/tags/v0.1.0
           token: ${{ secrets.GITHUB_TOKEN }}
 
