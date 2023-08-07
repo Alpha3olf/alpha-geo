@@ -37,7 +37,6 @@ jobs:
             platform: 'macos-latest'
 
     runs-on: ${{ matrix.platform }}
-    needs: new-release
     steps:
       -
         name: Checkout
@@ -69,7 +68,7 @@ jobs:
           bin: alpha-geo
           target: ${{ matrix.target }}
           archive: $bin-$target
-          ref: refs/tags/v${{ needs.new-release.outputs.tag }}
+          ref: refs/tags/v0.1.3
           changelog: CHANGELOG.md
           token: ${{ secrets.GITHUB_TOKEN }}
 
