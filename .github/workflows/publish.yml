@@ -61,8 +61,10 @@ jobs:
         name: Upload release
         uses: taiki-e/upload-rust-binary-action@v1.16.0
         with:
-          bin: fx
+          bin: alpha-geo
           target: ${{ matrix.target }}
-          ref: refs/tags/v0.1.0
+          archive: $bin-$target
+          ref: refs/tags/v0.1.1
+          changelog: CHANGELOG.md
           token: ${{ secrets.GITHUB_TOKEN }}
 
