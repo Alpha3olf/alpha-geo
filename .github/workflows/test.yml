@@ -10,4 +10,4 @@ jobs:
   call-workflow-1-in-local-repo:
     uses: Alpha3olf/alpha-geo/.github/workflows/cargo-tag.yml@main
   call-workflow-2-in-local-repo:
-    uses: ./.github/workflows/cargo-tag.yml@main
+    uses: ./.github/workflows/cargo-tag.yml
