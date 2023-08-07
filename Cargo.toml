@@ -1,5 +1,5 @@
 [package]
-name = "fx"
+name = "alpha-geo"
 version = "0.1.1"
 edition = "2021"
 
@@ -13,5 +13,5 @@ opt-level = 0
 
 [profile.release]
 opt-level = 3
-strip = true
+strip = false
 lto = true

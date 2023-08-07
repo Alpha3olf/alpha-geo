@@ -1,4 +1,3 @@
-mod fx;
 use rayon::prelude::*;
 use std::path::Path;
 use std::fs;
