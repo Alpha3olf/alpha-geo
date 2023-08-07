@@ -15,6 +15,7 @@ on:
   workflow_run:
     workflows: ['auto-tag']
     types:
+      - completed
       - success
 jobs:
   build:
