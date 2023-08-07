@@ -40,6 +40,8 @@ jobs:
   new-release:
     needs: new-tag
     runs-on: ubuntu-latest
+    outputs:
+          tag: ${{ needs.new-tag.outputs.ver }}
     steps:
       -
         name: Checkout

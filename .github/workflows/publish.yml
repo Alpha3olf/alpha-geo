@@ -15,7 +15,7 @@ on:
   workflow_run:
     workflows: ['auto-tag']
     types:
-      - completed
+      - success
 jobs:
   build:
     name: publish - ${{ matrix.target }}
@@ -36,6 +36,7 @@ jobs:
             platform: 'macos-latest'
 
     runs-on: ${{ matrix.platform }}
+    needs: new-release
     steps:
       -
         name: Checkout
@@ -67,7 +68,7 @@ jobs:
           bin: alpha-geo
           target: ${{ matrix.target }}
           archive: $bin-$target
-          ref: refs/tags/v0.1.2
+          ref: refs/tags/v${{ needs.new-release.outputs.tag }}
           changelog: CHANGELOG.md
           token: ${{ secrets.GITHUB_TOKEN }}
 
