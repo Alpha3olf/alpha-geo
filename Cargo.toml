@@ -1,6 +1,6 @@
 [package]
 name = "alpha-geo"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
 
 [dependencies]
@@ -15,3 +15,6 @@ opt-level = 0
 opt-level = 3
 strip = false
 lto = true
+
+[target.x86_64-pc-windows-msvc]
+rustflags = ["-C", "target-feature=+crt-static"]

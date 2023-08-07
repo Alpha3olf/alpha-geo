@@ -29,6 +29,9 @@ jobs:
             target: 'x86_64-pc-windows-gnu'
             platform: 'windows-latest'
           -
+            target: 'x86_64-pc-windows-msvc'
+            platform: 'windowss-latest'
+          -
             target: 'x86_64-apple-darwin'
             platform: 'macos-latest'
 
