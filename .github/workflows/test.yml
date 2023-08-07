@@ -7,7 +7,20 @@ on:
       - main
 
 jobs:
-  call-workflow-1-in-local-repo:
+  call-from-global:
     uses: Alpha3olf/alpha-geo/.github/workflows/cargo-tag.yml@main
-  call-workflow-2-in-local-repo:
+  call-from-local:
     uses: ./.github/workflows/cargo-tag.yml
+  new-tag:
+    needs:
+      - call-from-global
+      - call-from-local
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Create new tag
+        run: |
+          echo ${{ needs.call-from-global.outputs.ver }}
+          echo ${{ needs.call-from-local.outputs.ver }}
+  
