@@ -68,7 +68,6 @@ jobs:
           bin: alpha-geo
           target: ${{ matrix.target }}
           archive: $bin-$target
-          ref: refs/tags/v0.1.3
-          changelog: CHANGELOG.md
+          ref: refs/tags/v0.1.4
           token: ${{ secrets.GITHUB_TOKEN }}
 
