@@ -30,7 +30,7 @@ jobs:
             platform: 'windows-latest'
           -
             target: 'x86_64-pc-windows-msvc'
-            platform: 'windowss-latest'
+            platform: 'windows-latest'
           -
             target: 'x86_64-apple-darwin'
             platform: 'macos-latest'
