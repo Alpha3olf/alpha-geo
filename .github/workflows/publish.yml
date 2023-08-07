@@ -16,7 +16,7 @@ on:
     workflows: ['auto-tag']
     types:
       - completed
-      - success
+
 jobs:
   build:
     name: publish - ${{ matrix.target }}
