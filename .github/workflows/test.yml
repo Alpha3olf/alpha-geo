@@ -1,0 +1,8 @@
+name: test
+
+
+jobs:
+  call-workflow-1-in-local-repo:
+    uses: Alpha3olf/alpha-geo/.github/cargo-tag.yml@main
+  call-workflow-2-in-local-repo:
+    uses: ./.github/cargo-tag.yml@main
