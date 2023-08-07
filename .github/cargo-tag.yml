@@ -1,0 +1,61 @@
+name: cargo-tag
+
+permissions:
+  contents: write
+
+on:
+  workflow_dispatch:
+    inputs:
+      ver:
+        description: version
+        required: true
+        default: '0'
+  workflow_call:
+    inputs:
+      token: 
+        description: token
+        required: true
+        default: '0'
+    outputs:
+      ver:
+        description: tag version
+        value: ${{ jobs.cargo-tag.outputs.ver }}
+
+jobs:
+  cargo-tag:
+    runs-on: "ubuntu-latest"
+    outputs:
+          ver: ${{ steps.get.outputs.ver }}
+    steps:
+      - 
+        name: Checkout
+        uses: actions/checkout@v3
+
+      - 
+        name: Get
+        id: get
+        shell: bash
+        run: |
+          echo ver=$(awk -F ' = ' '$1 ~ /version/ { gsub(/["]/, "", $2); printf("%s",$2) }' Cargo.toml) >> $GITHUB_OUTPUT
+
+      # - 
+      #   name: Set
+      #   shell: bash
+      #   run: |
+      #     git tag v${{ steps.tag.outputs.ver }} && git push --tags
+
+  # new-release:
+  #   needs: new-tag
+  #   runs-on: ubuntu-latest
+  #   outputs:
+  #         tag: ${{ needs.new-tag.outputs.ver }}
+  #   steps:
+  #     -
+  #       name: Checkout
+  #       uses: actions/checkout@v3
+  #     - 
+  #       name: New release
+  #       uses: taiki-e/create-gh-release-action@v1.7.1
+  #       with:
+  #         ref: refs/tags/v${{ needs.new-tag.outputs.ver }}
+  #         token: ${{ secrets.GITHUB_TOKEN }}

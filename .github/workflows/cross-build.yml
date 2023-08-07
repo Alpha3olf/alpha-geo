@@ -15,7 +15,13 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
+
+  cargo-tag:
+    use: Alpha3olf/alpha-geo/.github/cargo-tag.yml@main
+    secrets: inherit
+
   build:
+    needs: cargo-tag
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -38,3 +44,4 @@ jobs:
         args: --release --target=x86_64-unknown-linux-gnu
     - name: Run tests
       run: cargo test --verbose
+    - run: echo ${{ needs.cargo-tag.outputs.ver }}
