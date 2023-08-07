@@ -49,5 +49,4 @@ jobs:
         uses: taiki-e/create-gh-release-action@v1
         with:
           ref: refs/tags/v${{ needs.new-tag.outputs.ver }}
-          changelog: CHANGELOG.md
           token: ${GITHUB_TOKEN}
