@@ -24,6 +24,11 @@ jobs:
     name: publish - ${{ inputs.target }}
     runs-on: ${{ inputs.platform }}
     steps:
+      - 
+        shell: bash
+        run: |
+          echo ${{ needs.tag.outputs.ver }}
+
       -
         name: Checkout
         uses: actions/checkout@v3
