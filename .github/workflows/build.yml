@@ -1,13 +1,13 @@
 name: build
 
+permissions:
+  contents: write
+
 on:
   workflow_dispatch:
   push:
     branches:
       - main
-
-env:
-  CARGO_TERM_COLOR: always
 
 jobs:
   build:
