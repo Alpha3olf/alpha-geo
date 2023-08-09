@@ -6,6 +6,9 @@ permissions:
 on:
   workflow_call:
     inputs:
+      tag:
+        required: true
+        type: number
       target:
         default: x86_64-apple-darwin
         required: false
@@ -31,7 +34,11 @@ jobs:
       -
         name: Checkout
         uses: actions/checkout@v3
-
+      -
+        name: echo tag
+        shell: bash
+        run: |
+          echo ${{ inputs.tag }}
       - 
         name: Install Rust
         uses: actions-rs/toolchain@v1.0.6

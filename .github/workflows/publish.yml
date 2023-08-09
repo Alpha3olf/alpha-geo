@@ -79,6 +79,7 @@ jobs:
             platform: 'windows-latest'
     uses: ./.github/workflows/in.yml
     with:
+      tag: ${{ jobs.push.outputs.ver }}
       target: ${{ matrix.target }}
       platform: ${{ matrix.platform }}
       release: true
