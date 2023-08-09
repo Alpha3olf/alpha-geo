@@ -41,6 +41,9 @@ jobs:
         with:
           ref: refs/tags/v${{ needs.push.outputs.ver }}
           token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set release tag
+        run: |
+          echo release_tag=${{ needs.push.outputs.ver }} >> "$GITHUB_ENV"
   
   upload-release:
     strategy:
@@ -60,6 +63,7 @@ jobs:
             platform: 'macos-latest'
     uses: ./.github/workflows/in.yml
     with:
+      tag: ${{ env.release_tag }}
       target: ${{ matrix.target }}
       platform: ${{ matrix.platform }}
       release: true
