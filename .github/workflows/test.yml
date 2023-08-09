@@ -62,5 +62,6 @@ jobs:
     with:
       target: ${{ matrix.target }}
       platform: ${{ matrix.platform }}
+      release: true
       
   
