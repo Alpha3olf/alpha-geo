@@ -62,7 +62,7 @@ jobs:
             platform: 'macos-latest'
     uses: ./.github/workflows/in.yml
     with:
-      tag: ${{steps.new-release.outputs.tag}}
+      tag: ${{ jobs.new-release.outputs.tag }}
       target: ${{ matrix.target }}
       platform: ${{ matrix.platform }}
       
