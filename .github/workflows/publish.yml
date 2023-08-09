@@ -14,7 +14,7 @@ on:
       ver:
         description: version
         required: true
-        default: '0'
+        default: 0
   push:
     tags:
       - v[0-9]+.*
@@ -79,7 +79,6 @@ jobs:
             platform: 'windows-latest'
     uses: ./.github/workflows/in.yml
     with:
-      tag: ${{ jobs.push.outputs.ver }}
       target: ${{ matrix.target }}
       platform: ${{ matrix.platform }}
       release: true

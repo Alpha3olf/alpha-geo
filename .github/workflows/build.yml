@@ -12,5 +12,3 @@ on:
 jobs:
   build:
     uses: ./.github/workflows/in.yml
-    with:
-      tag: 0
