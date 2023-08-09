@@ -1,5 +1,8 @@
 name: test
 
+permissions:
+  contents: write
+
 on:
   workflow_dispatch:
   push:
@@ -7,32 +10,60 @@ on:
       - main
 
 jobs:
-  call-from-global:
-    uses: Alpha3olf/alpha-geo/.github/workflows/cargo-tag.yml@main
-  call-from-local:
+  tag:
     uses: ./.github/workflows/cargo-tag.yml
-  new-tag:
+  push:
     needs:
-      - call-from-global
-      - call-from-local
+      - tag
     runs-on: ubuntu-latest
+    outputs:
+          ver: ${{ needs.tag.outputs.ver }}
     steps:
-      - name: Checkout
+      - 
+        name: Checkout
         uses: actions/checkout@v3
-      - name: Create new tag
+      - 
+        name: Set
+        shell: bash
         run: |
-          echo ${{ needs.call-from-global.outputs.ver }}
-          echo ${{ needs.call-from-local.outputs.ver }}
-  matrix-tag:
+          git tag v${{ needs.tag.outputs.ver }} && git push --tags
+
+  new-release:
+    needs: push
+    runs-on: ubuntu-latest
+    outputs:
+          tag: ${{ needs.push.outputs.ver }}
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v3
+      - 
+        name: New release
+        uses: taiki-e/create-gh-release-action@v1.7.1
+        with:
+          ref: refs/tags/v${{ needs.push.outputs.ver }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+  
+  upload-release:
     strategy:
       matrix:
-        target: [dev, stage, prod]
-    uses: ./.github/workflows/cargo-tag.yml
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Create new tag
-        run: |
-          echo ${{ matrix.target }} -${{ jobs.call-from-global.outputs.ver }}
+        include:
+          -
+            target: 'x86_64-unknown-linux-musl'
+            platform: 'ubuntu-latest'
+          -
+            target: 'x86_64-pc-windows-gnu'
+            platform: 'windows-latest'
+          -
+            target: 'x86_64-pc-windows-msvc'
+            platform: 'windows-latest'
+          -
+            target: 'x86_64-apple-darwin'
+            platform: 'macos-latest'
+    uses: ./.github/workflows/in.yml
+    with:
+      tag: ${{steps.new-release.outputs.tag}}
+      target: ${{ matrix.target }}
+      platform: ${{ matrix.platform }}
+      
   
