@@ -56,7 +56,7 @@ jobs:
 
       - 
         name: Build only
-        if: !inputs.release
+        if: ${{inputs.release == false }}
         uses: actions-rs/cargo@v1
         with:
           command: build
@@ -64,7 +64,7 @@ jobs:
       
       - 
         name: Upload release
-        if: inputs.release
+        if: ${{inputs.release == true }} 
         uses: taiki-e/upload-rust-binary-action@v1.16.0
         with:
           bin: alpha-geo
