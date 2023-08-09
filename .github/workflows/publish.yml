@@ -9,17 +9,50 @@ permissions:
   contents: write
 
 on:
+  workflow_dispatch:
+    inputs:
+      ver:
+        description: version
+        required: true
+        default: '0'
   push:
     tags:
       - v[0-9]+.*
-  workflow_run:
-    workflows: ['auto-tag']
-    types:
-      - completed
-
 jobs:
-  build:
-    name: publish - ${{ matrix.target }}
+
+  tag:
+    uses: ./.github/workflows/cargo-tag.yml
+  push:
+    needs:
+      - tag
+    runs-on: ubuntu-latest
+    outputs:
+          ver: ${{ needs.tag.outputs.ver }}
+    steps:
+      - 
+        name: Checkout
+        uses: actions/checkout@v3
+      - 
+        name: Set
+        shell: bash
+        run: |
+          git tag v${{ needs.tag.outputs.ver }} && git push --tags
+
+  new-release:
+    needs: push
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v3
+      - 
+        name: New release
+        uses: taiki-e/create-gh-release-action@v1.7.1
+        with:
+          ref: refs/tags/v${{ needs.push.outputs.ver }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  cross-release:
     strategy:
       matrix:
         include:
@@ -35,39 +68,9 @@ jobs:
           -
             target: 'x86_64-apple-darwin'
             platform: 'macos-latest'
-
-    runs-on: ${{ matrix.platform }}
-    steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v3
-
-      - 
-        name: Install Rust
-        uses: actions-rs/toolchain@v1.0.6
-        with:
-          profile: minimal
-          toolchain: stable
-          override: true
-
-      - 
-        if: matrix.platform == 'ubuntu-latest'
-        run: sudo chown -R $(whoami):$(id -ng) ~/.cargo/
-
-      - 
-        name: Cache Cargo Registry
-        uses: actions/cache@v3
-        with:
-          path: ~/.cargo/registry
-          key: ${{ matrix.platform }}-cargo-registry-${{ hashFiles('**/Cargo.toml') }}
-
-      - 
-        name: Upload release
-        uses: taiki-e/upload-rust-binary-action@v1.16.0
-        with:
-          bin: alpha-geo
-          target: ${{ matrix.target }}
-          archive: $bin-$target
-          ref: refs/tags/v0.1.4
-          token: ${{ secrets.GITHUB_TOKEN }}
+    uses: ./.github/workflows/in.yml
+    with:
+      target: ${{ matrix.target }}
+      platform: ${{ matrix.platform }}
+      release: true
 
