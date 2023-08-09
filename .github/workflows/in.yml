@@ -6,9 +6,6 @@ permissions:
 on:
   workflow_call:
     inputs:
-      tag:
-        required: true
-        type: number
       target:
         required: true
         type: string
@@ -30,7 +27,6 @@ jobs:
       - 
         shell: bash
         run: |
-          echo ${{ inputs.tag }}
           echo ${{ needs.tag.outputs.ver }}
 
       -
