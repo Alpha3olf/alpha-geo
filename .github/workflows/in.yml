@@ -7,11 +7,11 @@ on:
   workflow_call:
     inputs:
       target:
-        default: x86_64-unknown-linux-musl
+        default: x86_64-apple-darwin
         required: false
         type: string
       platform:
-        default: ubuntu-latest
+        default: macos-latest
         required: false
         type: string
       release:
