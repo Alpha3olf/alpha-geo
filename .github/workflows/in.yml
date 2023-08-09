@@ -6,9 +6,6 @@ permissions:
 on:
   workflow_call:
     inputs:
-      tag:
-        required: true
-        type: number
       target:
         required: true
         type: string
@@ -21,6 +18,8 @@ on:
         default: false
 
 jobs:
+  tag:
+    uses: ./.github/workflows/cargo-tag.yml
   build:
     name: publish - ${{ inputs.target }}
     runs-on: ${{ inputs.platform }}
@@ -55,6 +54,6 @@ jobs:
           bin: alpha-geo
           target: ${{ inputs.target }}
           archive: $bin-$target
-          ref: refs/tags/v${{ inputs.tag }}
+          ref: refs/tags/v${{ needs.tag.outputs.ver }}
           token: ${{ secrets.GITHUB_TOKEN }}
 

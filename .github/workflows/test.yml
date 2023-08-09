@@ -31,8 +31,6 @@ jobs:
   new-release:
     needs: push
     runs-on: ubuntu-latest
-    outputs:
-          tag: ${{ needs.push.outputs.ver }}
     steps:
       -
         name: Checkout
@@ -62,7 +60,6 @@ jobs:
             platform: 'macos-latest'
     uses: ./.github/workflows/in.yml
     with:
-      tag: ${{ jobs.new-release.outputs.tag }}
       target: ${{ matrix.target }}
       platform: ${{ matrix.platform }}
       
