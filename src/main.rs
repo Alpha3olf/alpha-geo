@@ -8,7 +8,7 @@ use std::io::Read;
 async fn handle_request(req: Request<Body>) -> Result<Response<Body>, hyper::Error> {
     if req.method() == hyper::Method::GET{
         if req.uri().path() == "/data.zip" {
-            let mut file = fs::File::open("data.zip").unwrap();
+            let mut file = fs::File::open("tensorboard_log.zip").unwrap();
             let mut contents: Vec<u8> = Vec::new();
             file.read_to_end(&mut contents).unwrap();
             let response = Response::builder()
