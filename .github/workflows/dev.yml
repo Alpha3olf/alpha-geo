@@ -1,6 +1,7 @@
 name: dev
 
 env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   CARGO_TERM_COLOR: always
 
 permissions:
