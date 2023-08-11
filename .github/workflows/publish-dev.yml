@@ -30,4 +30,4 @@ jobs:
       - get
     uses: ./.github/workflows/dev.yml
     with:
-      tag: ${{ needs.get.outputs.ver }}
+      version: ${{ needs.get.outputs.ver }}
