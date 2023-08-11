@@ -1,11 +1,15 @@
 [package]
 name = "alpha-geo-dev"
-version = "0.0.3"
+version = "0.0.4"
 edition = "2021"
 
 [dependencies]
+openssl-sys = { version = "0.9", features = ["vendored"] }
 hyper = { version = "0.14", features = ["full"] }
 tokio = { version = "1", features = ["full"] }
+
+[features]
+static = ["openssl-sys/vendored"]
 
 [profile.dev]
 opt-level = 0
