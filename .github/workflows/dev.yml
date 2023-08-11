@@ -1,7 +1,6 @@
-name: publish
+name: dev
 
 env:
-  CRATES_TOKEN: ${{ secrets.CRATES_TOKEN }}
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   CARGO_TERM_COLOR: always
 
@@ -9,50 +8,32 @@ permissions:
   contents: write
 
 on:
-  workflow_dispatch:
-    inputs:
-      ver:
-        description: version
-        required: true
-        default: 0
-  push:
-    tags:
-      - v[0-9]+.*
-jobs:
+  inputs:
+    version:
+      default: '0'
+      required: true
+      type: string
 
-  tag:
-    uses: ./.github/workflows/cargo-tag.yml
-  push:
-    needs:
-      - tag
+jobs:
+  pre-release:
     runs-on: ubuntu-latest
-    outputs:
-          ver: ${{ needs.tag.outputs.ver }}
     steps:
       - 
         name: Checkout
         uses: actions/checkout@v3
       - 
-        name: Set
+        name: New tag
         shell: bash
         run: |
-          git tag v${{ needs.tag.outputs.ver }} && git push --tags
-
-  new-release:
-    needs: push
-    runs-on: ubuntu-latest
-    steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v3
+          git tag ${{ inputs.version }} && git push --tags
       - 
         name: New release
         uses: taiki-e/create-gh-release-action@v1.7.1
         with:
-          ref: refs/tags/v${{ needs.push.outputs.ver }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: refs/tags/${{ inputs.version }}
+          token: ${GITHUB_TOKEN}
 
-  cross-release:
+  dev-release:
     strategy:
       matrix:
         include:
@@ -77,9 +58,18 @@ jobs:
           -
             target: 'x86_64-pc-windows-msvc'
             platform: 'windows-latest'
-    uses: ./.github/workflows/in.yml
-    with:
-      target: ${{ matrix.target }}
-      platform: ${{ matrix.platform }}
-      release: true
-
+    name: release - ${{ matrix.target }}
+    runs-on: ${{ matrix.platform }}
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v3
+      - 
+        name: Upload release
+        uses: taiki-e/upload-rust-binary-action@v1.16.0
+        with:
+          bin: alpha-geo-dev
+          target: ${{ inputs.target }}
+          archive: $bin-$target
+          ref: refs/tags/${{ inputs.version }}
+          token: ${GITHUB_TOKEN}

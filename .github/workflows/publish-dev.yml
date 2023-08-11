@@ -1,0 +1,33 @@
+name: publish-dev
+
+permissions:
+  contents: write
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - dev
+
+jobs:
+  ver:
+    runs-on: "ubuntu-latest"
+    outputs:
+          ver: d${{ steps.get.outputs.ver }}
+    steps:
+      - 
+        name: Checkout
+        uses: actions/checkout@v3
+
+      - 
+        name: Get
+        id: get
+        shell: bash
+        run: |
+          echo ver=$(awk -F ' = ' '$1 ~ /version/ { gsub(/["]/, "", $2); printf("%s",$2) }' Cargo.toml) >> $GITHUB_OUTPUT
+  build:
+    needs:
+      - tag
+    uses: ./.github/workflows/dev.yml
+    with:
+      tag: ${{ needs.ver.outputs.ver }}

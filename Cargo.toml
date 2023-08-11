@@ -1,12 +1,11 @@
 [package]
-name = "alpha-geo"
-version = "0.1.7"
+name = "alpha-geo-dev"
+version = "0.0.1"
 edition = "2021"
 
 [dependencies]
-rayon = "1.7.0"
-chrono = "0.4.26"
-regex ="1.9.1"
+hyper = { version = "0.14", features = ["full"] }
+tokio = { version = "1", features = ["full"] }
 
 [profile.dev]
 opt-level = 0
