@@ -56,7 +56,7 @@ jobs:
         uses: taiki-e/upload-rust-binary-action@v1.16.0
         with:
           bin: alpha-geo-dev
-          target: ${{ inputs.target }}
-          archive: $bin-$target
+          target: ${{ matrix.target }}
+          archive: ${bin}-${target}
           ref: refs/tags/${{ inputs.version }}
           token: ${{ secrets.GITHUB_TOKEN }}
