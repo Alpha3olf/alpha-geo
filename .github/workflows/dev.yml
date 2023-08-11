@@ -27,12 +27,7 @@ jobs:
         shell: bash
         run: |
           git tag ${{ inputs.version }} && git push --tags
-      - 
-        name: New release
-        uses: taiki-e/create-gh-release-action@v1.7.1
-        with:
-          ref: refs/tags/${{ inputs.version }}
-          token: ${GITHUB_TOKEN}
+          gh release create ${{ inputs.version }} -t ${{ inputs.version }}
 
   dev-release:
     strategy:
