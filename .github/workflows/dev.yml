@@ -8,11 +8,12 @@ permissions:
   contents: write
 
 on:
-  inputs:
-    version:
-      default: '0'
-      required: true
-      type: string
+  workflow_call:
+    inputs:
+      version:
+        default: '0'
+        required: true
+        type: string
 
 jobs:
   pre-release:

@@ -10,7 +10,7 @@ on:
       - dev
 
 jobs:
-  ver:
+  get:
     runs-on: "ubuntu-latest"
     outputs:
           ver: d${{ steps.get.outputs.ver }}
@@ -27,7 +27,7 @@ jobs:
           echo ver=$(awk -F ' = ' '$1 ~ /version/ { gsub(/["]/, "", $2); printf("%s",$2) }' Cargo.toml) >> $GITHUB_OUTPUT
   build:
     needs:
-      - tag
+      - get
     uses: ./.github/workflows/dev.yml
     with:
-      tag: ${{ needs.ver.outputs.ver }}
+      tag: ${{ needs.get.outputs.ver }}
