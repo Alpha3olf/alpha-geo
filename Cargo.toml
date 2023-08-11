@@ -1,6 +1,6 @@
 [package]
 name = "alpha-geo-dev"
-version = "0.0.4"
+version = "0.0.5"
 edition = "2021"
 
 [dependencies]
@@ -8,12 +8,18 @@ hyper = { version = "0.14", features = ["full"] }
 tokio = { version = "1", features = ["full"] }
 
 [profile.dev]
-opt-level = 's'
+opt-level = 0
 
 [profile.release]
 opt-level = 3
-strip = true
+strip = false
 lto = true
 
 [target.x86_64-pc-windows-msvc]
 rustflags = ["-C", "target-feature=+crt-static"]
+
+[target.x86_64-unknown-linux-gnu]
+rustflags = ["-C", "link-arg=-s"]
+
+[target.x86_64-unknown-linux-musl]
+rustflags = ["-C", "link-arg=-s"]
