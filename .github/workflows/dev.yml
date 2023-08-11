@@ -1,7 +1,6 @@
 name: dev
 
 env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   CARGO_TERM_COLOR: always
 
 permissions:
@@ -23,7 +22,7 @@ jobs:
         name: Checkout
         uses: actions/checkout@v3
       - 
-        name: New tag
+        name: Release
         shell: bash
         run: |
           git tag ${{ inputs.version }} && git push --tags
@@ -68,4 +67,4 @@ jobs:
           target: ${{ inputs.target }}
           archive: $bin-$target
           ref: refs/tags/${{ inputs.version }}
-          token: ${GITHUB_TOKEN}
+          token: ${{ secrets.GITHUB_TOKEN }}
